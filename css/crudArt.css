@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Playwrite+AU+TAS:wght@100..400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* Scroll página */
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgb(23, 23, 23);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+/* transform: translate(100px); */
+    background: #d8a347;
+}
+
+/* Handle active */
+::-webkit-scrollbar-thumb:active {
+    cursor: grabbing;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #a3581e;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+
+body{
+    font-family:  sans-serif;
+    min-height: 100vh;
+    color: #fff;
+    background-color: #cd9d48;
+}
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+header div a {
+    font-family: "Nunito";
+    text-decoration: none;
+    color: #fff;
+    cursor: pointer;
+        &:hover {
+            border-radius: 7px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+}
+.logo {
+    margin: 1rem;
+    font-weight: 900;
+    font-size: 2rem;
+}
+table{
+    margin-top: 2rem;
+    width: 100%;
+}
+h1{
+    text-align: center;
+}
+.table thead tr {
+    columns: 8;
+}
+
+tr{
+    color: #fff;
+}
+

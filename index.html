@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>La magia del azucar</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="https://www.instagram.com/la.magia_del.azucar/" target="_blank"><img src="./img/img.png" alt="logo"></a>
+
+            <div class="search-container">
+                <div class="coso">
+                    <input type="text" id="buscador" placeholder="Buscar..."> 
+                    <button id="boton" >Buscar</button>
+                </div>
+                <div id="dropdown" class="dropdown-content"></div>
+            </div>
+
+            <ul>
+                <li><a href="#nosotros">Nosotras</a></li>
+                <li><a href="#contacto">Consultar</a></li>
+                <li><a href="#" id="openCart">Carrito <i class='bx bx-cart'></i></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="primer-cara">
+            <a href="#">
+                <img src="./img/img.png" alt="Img">
+            </a>
+            <div class="data-info">
+                <h1>La magia del azúcar</h1>
+                <p>Llená tus tardes del rico sabor del azúcar y llevá mucho sabor a tus eventos 😋</p>
+                <button><a href="#menu">Ver Menu</a></button>
+            </div>
+            
+        </section>
+        <div class="data-info-dos" id="menu">
+            <h2>Encuentra las <br> <span>mejores recetas</span></h2>
+        </div>
+        <section class="segunda-cara">
+            <div class="content-cards" id="content-cards">
+                <!-- <div class="card">
+                    <img src="./img/img.png" alt="card img">
+                    <div class="info-content">
+                        <h3>Title card</h3>
+                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+                    </div>
+                </div> -->
+            </div>
+            <!-- <div class="btns">
+                <button id="prev-btn">Atrás</button>
+                <button id="next-btn">Siguiente</button>
+            </div> -->
+        </section>
+        <!-- --- -->
+        <div class="data-info-dos">
+            <h2 class="mate">Ideal para el mate</h2>
+        </div>
+        <section class="segunda-cara">
+            <div class="content-cards" id="cards-content">
+                <!-- <div class="card">
+                    <img src="./img/img.png" alt="card img">
+                    <div class="info-content">
+                        <h3>Title card</h3>
+                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+                    </div>
+                </div> -->
+            </div>
+            <!-- <div class="btns">
+                <button id="prev-btn">Atrás</button>
+                <button id="next-btn">Siguiente</button>
+            </div> -->
+        </section>
+        <!-- ----- -->
+        <section class="cuarta-cara" id="nosotros">
+            <h2>Nosotras</h2>
+            <div>
+                <aside>
+                    <h3>¡Bienvenidos a La magia del azúcar!</h3>
+                    <p>Estamos emocionados de presentar nuestro nuevo emprendimiento, dedicado a traer el delicioso sabor del azúcar a tus eventos y tardes. Nuestra pasión por crear dulces deliciosos y sabores inolvidables nos inspiró a embarcarnos en este dulce viaje juntas.</p>
+                </aside>
+                <aside>
+                    <h3>Quiénes Somos:</h3>
+                    <p>Somos <a href="https://www.instagram.com/gomezbetty37" target="_blank">@gomezbetty37</a> y <a href="https://www.instagram.com/taatii_pereiira" target="_blank">@taatii_pereiira</a>, dos amigas unidas por nuestro amor por la repostería y un sueño compartido de esparcir alegría a través de nuestras confecciones. Nuestra misión es llenar tus días con el rico sabor del azúcar y llevar un toque de dulzura a cada ocasión especial.</p>
+                </aside>
+                <aside>
+                    <h3>Qué Ofrecemos:</h3>
+                    <p>En La magia del azúcar, nos especializamos en una amplia gama de dulces perfectos para cualquier evento. Ya sea que estés planeando una fiesta de cumpleaños, una boda o simplemente quieras satisfacer tu antojo de algo dulce, tenemos algo para todos.</p>
+                </aside>
+            </div>
+        </section>
+        <section class="tercera-cara" id="contacto">
+            <div class="data-info">
+                <h1>Contáctanos:</h1>
+                <p>Hacemos que sea fácil para ti realizar pedidos y solicitar presupuestos. Simplemente contáctanos por WhatsApp o Instagram.</p>
+                <button><a href="https://www.instagram.com/la.magia_del.azucar/" target="_blank"><i class='bx bxl-instagram bx-md'></i></a></button>
+                <button><a href="https://api.whatsapp.com/send/?phone=5491159260544&text&type=phone_number&app_absent=0" target="_blank"><i class='bx bxl-whatsapp bx-md'></i></a></button>
+            </div>
+            <a href="#">
+                <img src="./img/img.png" alt="Img">
+            </a>
+        </section>
+    </main>
+
+    <!-- Overlay del carrito -->
+    <div id="cartOverlay" class="overlay-carrito">
+        <div class="cartContent">
+            <span id="closeCart" class="close">&times;</span>
+            <h2>Carrito de Compras</h2>
+            <div id="cartItems">
+                <!-- Los productos añadidos se mostrarán aquí -->
+            </div>
+            <div id="cartTotal">
+                <!-- Total del carrito -->
+            </div>
+            <button id="purchaseButton" class="btn btn-primary">Realizar Compra</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <script src="./api.js"></script>
+    <script src="./js/app.js"></script>
+</body>
+</html>
