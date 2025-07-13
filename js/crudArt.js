@@ -20,8 +20,15 @@ function listarArticulos() {
             tbody.innerHTML = "";
             data.forEach(articulo => {
                 const fila = document.createElement("tr");
+                const imagenPreview = document.getElementById("imagen-preview");
+                imagenPreview.src = articulo.imagenUrl 
+                ? `http://localhost:8080/api/articulos/imagenes/${articulo.imagenUrl}`
+                : "";
+
+                const imagenUrl = articulo.imagenUrl ? `http://localhost:8080/api/articulos/imagenes/${articulo.imagenUrl}` : '../img/img.png'; // imagen por defecto
                 fila.innerHTML = `
                     <td>${articulo.id}</td>
+                    <td><img src="${imagenUrl}" alt="Sin imagen" width="50"></td>
                     <td>${articulo.nombre}</td>
                     <td>${articulo.precio.toFixed(2)}</td>
                     <td>
@@ -43,20 +50,23 @@ function guardarArticulo(event) {
     const id = document.getElementById("idArticulo").value;
     const nombre = document.getElementById("nombre").value.trim();
     const precio = parseFloat(document.getElementById("precio").value);
+    const imagen = document.getElementById("imagen").files[0];
 
     // Validación de campos
-    if (!nombre || isNaN(precio) || precio < 0) {
+    if (!nombre || !imagen || isNaN(precio) || precio < 0) {
         alert("Por favor complete correctamente los campos.");
         return;
     }
 
     // Crea un objeto artículo con los datos del formulario
-    const articulo = { nombre, precio };
+    const articulo = { nombre, precio, imagen };
     // Determina si es una edición (PUT) o creación (POST)
     const url = id ? `${API_URL}/${id}` : API_URL;
     const metodo = id ? "PUT" : "POST";
+    
 
     // Envia el artículo al backend usando fetch
+    console.log("Subiendo imagen a:", URL)
     fetch(url, {
         method: metodo,
         headers: { "Content-Type": "application/json" }, // Indica que el cuerpo es JSON
@@ -65,6 +75,27 @@ function guardarArticulo(event) {
     .then(response => {
         if (!response.ok) throw new Error("Error al guardar"); // Verifica respuesta exitosa
         return response.json();
+    }) 
+    .then(data => {
+        console.log("Artículo guardado:", data);
+        const archivo = document.getElementById("imagen").files[0];
+        console.log("Archivo para subir:", archivo);
+
+        if (archivo && data.id) {
+            const formData = new FormData();
+            formData.append("archivo", archivo);
+
+            return fetch(`http://localhost:8080/api/articulos/${data.id}/imagen`, {
+                method: "POST",
+                body: formData
+            });
+        }
+        listarArticulos();
+    })
+    .then(() => {
+        document.getElementById("form-articulo").reset();
+        document.getElementById("idArticulo").value = "";
+        listarArticulos();
     })
     .then(() => {
         // Limpia el formulario y recarga la tabla
@@ -72,6 +103,7 @@ function guardarArticulo(event) {
         document.getElementById("idArticulo").value = "";
         listarArticulos();
     })
+  
     .catch(error => console.error("Error al guardar artículo:", error)); // Manejo de errores
 }
 
@@ -84,6 +116,8 @@ function editarArticulo(id) {
             document.getElementById("idArticulo").value = articulo.id;
             document.getElementById("nombre").value = articulo.nombre;
             document.getElementById("precio").value = articulo.precio;
+            document.getElementById("imagen").value = "";
+            listarArticulos();
         })
         .catch(error => console.error("Error al obtener artículo:", error)); // Manejo de errores
 }

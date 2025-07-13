@@ -2,37 +2,53 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('content-cards');
     const contenido = document.getElementById('cards-content');
 
+    // URL base de la API
+    const API_URL = "http://localhost:8080/api/articulos";
 
     const renderPage = () => {
-        container.innerHTML = ''; // Limpiar el contenedor
-        
-        imagenes.forEach(tarjeta => {
-            container.innerHTML += `
-                <div class="card" id="${tarjeta.titulo}">
-                    <img src="${tarjeta.imagen}" alt="${tarjeta.alt}">
-                    <div class="info-content">
-                        <h3>${tarjeta.titulo}</h3>
-                        <p>${tarjeta.descripcion}</p>
-                        <button class="pedido" data-title="${tarjeta.titulo}" data-description="${tarjeta.descripcion}" id="add-to-cart">Agregar <i class='bx bx-cart'></i></a></li></button>
-                    </div>
-                </div>
-            `;
-        });
+        fetch(API_URL)
+            .then(response => response.json())
+            .then(data => {
+                container.innerHTML = '';
+                contenido.innerHTML = '';
 
-        contenido.innerHTML = ''; // Limpiar el contenedor
-        
-        segundo.forEach(tarjeta => {
-            contenido.innerHTML += `
-                <div class="card card-segundo" id="${tarjeta.titulo}">
-                    <img class="segundo" src="${tarjeta.imagen}" alt="${tarjeta.alt}">
-                    <div class="info-content">
-                        <h3>${tarjeta.titulo}</h3>
-                        <p>${tarjeta.descripcion}</p>
-                        <button class="pedido" data-title="${tarjeta.titulo}" data-description="${tarjeta.descripcion}" id="add-to-cart">Agregar <i class='bx bx-cart'></i></a></li></button>
-                    </div>
-                </div>
-            `;
-        });
+                data.forEach(tarjeta => {
+                    const imagen = tarjeta.imagenUrl 
+                        ? `http://localhost:8080/api/articulos/imagenes/${tarjeta.imagenUrl}` 
+                        : './img/img.png'; // imagen por defecto
+
+                    container.innerHTML += `
+                        <div class="card" id="${tarjeta.nombre}">
+                            <img src="${imagen}" alt="${tarjeta.nombre}">
+                            <div class="info-content">
+                                <h3>${tarjeta.nombre}</h3>
+                                <p>Precio: $${tarjeta.precio}</p>
+                                <button class="pedido" data-title="${tarjeta.nombre}" data-description="Precio: $${tarjeta.precio}" id="add-to-cart">Agregar <i class='bx bx-cart'></i></button>
+                            </div>
+                        </div>
+                    `;
+
+                    contenido.innerHTML += `
+                        <div class="card card-segundo" id="${tarjeta.nombre}">
+                            <img class="segundo" src="${imagen}" alt="${tarjeta.nombre}">
+                            <div class="info-content">
+                                <h3>${tarjeta.nombre}</h3>
+                                <p>Precio: $${tarjeta.precio}</p>
+                                <button class="pedido" data-title="${tarjeta.nombre}" data-description="Precio: $${tarjeta.precio}" id="add-to-cart">Agregar <i class='bx bx-cart'></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Volver a asignar eventos a los botones
+                document.querySelectorAll('#add-to-cart').forEach(e => {
+                    e.addEventListener('click', aniadirCarrito);
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener los productos:', error);
+            });
+
 
         // document.querySelectorAll('.pedido').forEach(card => {
         //     card.addEventListener('click', () => {
@@ -49,10 +65,18 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPage();
 
 
+    
+   
+    // Entra al crud
+    const crud = document.getElementById('crud');
+    
+    crud.addEventListener('click', () => {
+        window.location.href = './html/crud.html';
+    });
+    
+
     // ----------------------------------
     // Inicia el buscador
-   
-
     const boton = document.getElementById('boton');
 
     boton.addEventListener('click', () => {
@@ -60,13 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const filter = input.value.toUpperCase();
         const dropdown = document.getElementById('dropdown');
         let results = [];
-
-        // Entra al crud
-        boton.addEventListener('click', () => {
-            if (input.value.trim().toUpperCase() === 'CRUD') {
-                window.location.href = './html/crud.html';
-            }
-        });
 
         // Limpiar resultados anteriores
         dropdown.innerHTML = '';
@@ -140,12 +157,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function aniadirCarrito() {
         const product = this.closest('.card');
-        const productName = product.querySelector('data-title');
+        const productName = product.querySelector('h3').textContent;
         const productImage = product.querySelector('img').src;
+        const productPrice = product.querySelector('p').textContent;
         const productInfo = {
             name: productName,
             image: productImage,
-            price: 777 // Precio aleatorio para demostración
+            price: parseInt(productPrice.replace('Precio: $', '').trim()), // Extrae solo el precio numérico
         };
         cart.push(productInfo);
         cont = cart.length;
