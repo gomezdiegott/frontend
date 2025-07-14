@@ -77,70 +77,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ----------------------------------
     // Inicia el buscador
+
+    document.getElementById('buscador').addEventListener('input', () => {
+        buscar();
+    });
+
     const boton = document.getElementById('boton');
 
-    boton.addEventListener('click', () => {
+    function buscar() {
         const input = document.getElementById('buscador');
-        const filter = input.value.toUpperCase();
+        const filter = input.value.trim();
         const dropdown = document.getElementById('dropdown');
-        let results = [];
-
-        // Limpiar resultados anteriores
         dropdown.innerHTML = '';
-    
-        // Buscar en el array "imagenes"
-        imagenes.forEach(item => {
-            if (item.titulo.toUpperCase().includes(filter)) {
-                results.push(item);
-            }
-        });
-    
-        // Buscar en el array "segundo"
-        segundo.forEach(item => {
-            if (item.titulo.toUpperCase().includes(filter)) {
-                results.push(item);
-            }
-        });
-    
-        // Mostrar resultados
-        if (results.length > 0) {
-            results.forEach(item => {
-                const a = document.createElement('a');
-                a.href = '#';
-                a.innerHTML = ` 
-                    <a href="#${item.titulo}" class="search-card">
-                        <img src="${item.imagen}" alt="${item.alt}">
-                        <div class="search-content">
-                            <h3>${item.titulo}</h3>
-                            <p>${item.descripcion}</p>
-                        </div>
-                    </a>
-                `;
-                dropdown.appendChild(a);
-            });
-        } else {
-            dropdown.innerHTML = '<p>No se encontraron coincidencias.</p>';
+
+        if (filter === '') {
+            dropdown.style.display = 'none';
+            return;
         }
-    
-        // Mostrar el dropdown si hay resultados o mensaje de no coincidencia
-        dropdown.style.display = 'block';
 
-        boton.addEventListener('click', function() {
-            // Mostrar el dropdown cuando se hace clic en el campo de búsqueda
-            document.getElementById('dropdown').style.display = 'block';
-        });
-        
-        // Cerrar el dropdown cuando se hace clic fuera del campo de búsqueda y del dropdown
-        window.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdown');
-        
-            // Verifica si el clic ocurrió fuera del campo de búsqueda y fuera del dropdown
-            if (event.target !== dropdown && event.target !== boton && !dropdown.contains(event.target)) {
-                dropdown.style.display = 'none';
-            }
-        });
+        fetch(`http://localhost:8080/api/articulos/buscar?nombre=${encodeURIComponent(filter)}`)
+            .then(res => res.json())
+            .then(results => {
+                dropdown.innerHTML = ''; // Limpiar anteriores
 
+                if (results.length > 0) {
+                    results.forEach(item => {
+                        const a = document.createElement('a');
+                        a.href = `#${item.nombre}`;
+                        a.classList.add('search-card');
+                        a.innerHTML = `
+                            <img src="${`http://localhost:8080/api/articulos/imagenes/${item.imagenUrl}` || 'default.jpg'}" alt="${item.nombre}">
+                            <div class="search-content">
+                                <h3>${item.nombre}</h3>
+                                <p>${item.descripcion || ''}</p>
+                            </div>
+                        `;
+                        dropdown.appendChild(a);
+                    });
+                } else {
+                    dropdown.innerHTML = '<p>No se encontraron coincidencias.</p>';
+                }
+
+                dropdown.style.display = 'block';
+            })
+            .catch(error => {
+                dropdown.innerHTML = `<p>Error al buscar: ${error.message}</p>`;
+                dropdown.style.display = 'block';
+            });
+    }
+
+    // Mostrar el dropdown al hacer clic en el campo
+    boton.addEventListener('click', function() {
+        document.getElementById('dropdown').style.display = 'block';
     });
+
+    // Cerrar el dropdown cuando se hace clic fuera
+    window.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('dropdown');
+        if (
+            event.target !== dropdown &&
+            event.target !== boton &&
+            event.target !== document.getElementById('buscador') &&
+            !dropdown.contains(event.target)
+        ) {
+            dropdown.style.display = 'none';
+        }
+    });
+
 
     // ----------------------------------
     // Inicia el carrito
