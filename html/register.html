@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/register.css">
+    <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.4.2/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+    <title>Registrarse</title>
+</head>
+<body class="body-register">  
+    <header>
+        <div class="logo">
+            <a href="../index.html">
+                <span>La magia del azucar</span>
+            </a>
+        </div>
+    </header>
+
+    <main>
+
+        <div class="container">
+            <div class="mensajes">
+                <!-- Mensaje de éxito -->
+                <div id="mensajeExito" class="alert alert-success" style="display: none;">
+                    Registro exitoso.
+                    <button class="btn-close">&times;</button>
+                </div>
+                <!-- Mensaje de error -->
+                <div id="mensajeError" class="alert alert-danger" style="display: none;">
+                <span>Error</span>
+                <button class="btn-close">&times;</button>
+                </div>
+            </div>
+            <form id="form-registro">
+                <h2>Registro</h2>
+                <div>
+                    <input type="name" name="nombre" id="name" placeholder="Nombre">
+                    <div class="error-text"></div>
+                </div>
+                <div>
+                    <input type="surname" name="apellido" id="surname" placeholder="Apellido">
+                    <div class="error-text"></div>
+                </div>
+                <div>
+                    <input type="email" name="email" id="email" placeholder="Email" autocomplete="username">
+                    <div class="error-text"></div>
+                </div>                
+                <div>
+                    <input type="password" name="password" id="password" placeholder="Contraseña" autocomplete="current-password">
+                    <div class="error-text"></div>
+                </div>
+                <div>
+                    <input type="date" name="fechaNacimiento" id="date">
+                    <div class="error-text"></div>
+                </div>
+                <div>
+                    <select name="pais" id="country">
+                        <option value>País</option>
+                        <option value="Argentina">Argentina</option>
+                        <option value="Chile">Chile</option>
+                        <option value="Bolivia">Bolivia</option>
+                        <option value="Brasil">Brasil</option>
+                        <option value="Colombia">Colombia</option>
+                        <option value="Ecuador">Ecuador</option>
+                    </select>
+                    <div class="error-text"></div>
+                </div>
+                <div class="terminos">
+                    <input type="checkbox" class="check" name="checkbox" id="terminos" required> 
+                    <label for="terminos" class="textoCheck">Acepto términos y condiciones</label>
+                    <div class="error-text"></div>
+                </div>
+                <div>
+                    <input type="submit" value="Registrarse" class="boton">  
+                    <div class="error-text"></div>
+                </div>
+                <a href="../html/login.html">Login</a>
+            </form>
+        </div>
+    </main>
+    <script src="../js/register.js"></script>
+</body>
+</html>

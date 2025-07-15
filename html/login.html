@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon">
+    <title>Iniciar sesión</title>
+</head>
+
+<body class="body-login">
+    <header>
+        <div class="logo">
+            <a href="../index.html">
+                <span>La magia del azucar</span>
+            </a>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="mensajes">
+                <!-- Mensaje de éxito -->
+                <div id="mensajeExito" class="alert alert-success" style="display: none;">
+                    Inicio de sesión exitoso. Redirigiendo...
+                    <button class="btn-close">&times;</button>
+                </div>
+                <!-- Mensaje de error -->
+                <div id="mensajeError" class="alert alert-danger" style="display: none;">
+                <span>Error</span>
+                <button class="btn-close">&times;</button>
+                </div>
+            </div>
+            <form id="form-login">
+                <h2>Iniciar Sesión</h2>
+                <div>
+                    <input type="email" name="email" id="email" placeholder="Email">
+                    <div class="error-text"></div>
+                </div>
+                <div>
+                    <input type="password" name="password" id="password" placeholder="Contraseña">
+                    <div class="error-text"></div>
+                </div>
+                <div>
+                    <input type="submit" value="Iniciar Sesión" class="btn">
+                    <div class="error-text"></div>
+                </div>
+                <a href="../html/register.html">Registrarse</a>
+            </form>
+        </div>
+    </main>
+    <script src="../js/login.js"></script>
+</body>
+
+</html>
