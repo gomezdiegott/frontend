@@ -237,6 +237,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------------
     // Inicia sesión
 
+    const saludo = document.getElementById('saludoUsuario');
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+
+    if (usuario && usuario.nombre) {
+        saludo.textContent = `Hola, ${usuario.nombre} 👋`;
+    } else {
+        saludo.textContent = `Hola, visitante 👤`;
+    }
+
 
 });
 
