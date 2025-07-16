@@ -18,30 +18,30 @@ document.addEventListener('DOMContentLoaded', () => {
                         : './img/img.png'; // imagen por defecto
 
                     container.innerHTML += `
-                        <div class="card" id="${tarjeta.nombre}">
+                        <div class="card" data-id="${tarjeta.id}">
                             <img src="${imagen}" alt="${tarjeta.nombre}">
                             <div class="info-content">
                                 <h3>${tarjeta.nombre}</h3>
                                 <p>Precio: $${tarjeta.precio}</p>
-                                <button class="pedido" data-title="${tarjeta.nombre}" data-description="Precio: $${tarjeta.precio}" id="add-to-cart">Agregar <i class='bx bx-cart'></i></button>
+                                <button class="pedido add-to-cart" data-title="${tarjeta.nombre}" data-description="Precio: $${tarjeta.precio}" >Agregar <i class='bx bx-cart'></i></button>
                             </div>
                         </div>
                     `;
 
                     contenido.innerHTML += `
-                        <div class="card card-segundo" id="${tarjeta.nombre}">
+                        <div class="card card-segundo" data-id="${tarjeta.id}">
                             <img class="segundo" src="${imagen}" alt="${tarjeta.nombre}">
                             <div class="info-content">
                                 <h3>${tarjeta.nombre}</h3>
                                 <p>Precio: $${tarjeta.precio}</p>
-                                <button class="pedido" data-title="${tarjeta.nombre}" data-description="Precio: $${tarjeta.precio}" id="add-to-cart">Agregar <i class='bx bx-cart'></i></button>
+                                <button class="pedido add-to-cart" data-title="${tarjeta.nombre}" data-description="Precio: $${tarjeta.precio}" >Agregar <i class='bx bx-cart'></i></button>
                             </div>
                         </div>
                     `;
                 });
 
                 // Volver a asignar eventos a los botones
-                document.querySelectorAll('#add-to-cart').forEach(e => {
+                document.querySelectorAll('.add-to-cart').forEach(e => {
                     e.addEventListener('click', aniadirCarrito);
                 });
             })
@@ -149,96 +149,152 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicia el carrito
 
 
-    const addCarrito = document.querySelectorAll('#add-to-cart');
-    const carrito = document.querySelector('#openCart');
-    
-    let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-    let cont = cart.length;
+    async function aniadirCarrito() {
+        const card = this.closest('.card');
+        const articuloId = card.dataset.id;
+        const usuario = JSON.parse(localStorage.getItem('usuario'));
 
-    // Inicia el contador al cargar la página
-    carrito.innerHTML = `Carrito <i class='bx bx-cart'></i> <sup>${cont}</sup>`;
+        if (!usuario) {
+            alert("Tenés que iniciar sesión para usar el carrito.");
+            return;
+        }
 
-    function aniadirCarrito() {
-        const product = this.closest('.card');
-        const productName = product.querySelector('h3').textContent;
-        const productImage = product.querySelector('img').src;
-        const productPrice = product.querySelector('p').textContent;
-        const productInfo = {
-            name: productName,
-            image: productImage,
-            price: parseInt(productPrice.replace('Precio: $', '').trim()), // Extrae solo el precio numérico
-        };
-        cart.push(productInfo);
-        cont = cart.length;
-        localStorage.setItem('cartItems', JSON.stringify(cart));
-        localStorage.setItem('cartCount', JSON.stringify(cont));
-        carrito.innerHTML = `Carrito <i class='bx bx-cart'></i> <sup>${cont}</sup>`;
-        updateCart();
-    }
+        const email = usuario.email;
 
-    addCarrito.forEach(e => {
-        e.addEventListener('click', aniadirCarrito);
-    });
-
-    function updateCart() {
-        const cartItemsContainer = document.getElementById('cartItems');
-        cartItemsContainer.innerHTML = '';
-        let total = 0;
-
-        cart.forEach((item, index) => {
-            const cartItem = document.createElement('div');
-            cartItem.className = 'cart-item';
-
-            const itemImage = document.createElement('img');
-            itemImage.src = item.image;
-
-            const itemInfo = document.createElement('div');
-            itemInfo.className = 'cart-item-info';
-            itemInfo.innerHTML = `<h5>${item.name}</h5><p>Precio: $${item.price}</p>`;
-
-            const removeButton = document.createElement('button');
-            removeButton.textContent = 'Eliminar';
-            removeButton.addEventListener('click', function () {
-                cart.splice(index, 1);
-                cont = cart.length;
-                localStorage.setItem('cartItems', JSON.stringify(cart));
-                localStorage.setItem('cartCount', JSON.stringify(cont));
-                carrito.innerHTML = `Carrito <i class='bx bx-cart'></i> <sup>${cont}</sup>`;
-                updateCart();
+        try {
+            const res = await fetch(`http://localhost:8080/api/carrito/agregar?email=${email}&articuloId=${articuloId}&cantidad=1`, {
+                method: 'POST'
             });
 
-            cartItem.appendChild(itemImage);
-            cartItem.appendChild(itemInfo);
-            cartItem.appendChild(removeButton);
-            cartItemsContainer.appendChild(cartItem);
+            if (res.ok) {
+                alert("Producto agregado al carrito");
+                actualizarContador(email);
+            } else {
+                alert("Error al agregar al carrito");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error de conexión");
+        }
+    };
 
-            total += item.price;
-        });
 
-        const cartTotal = document.getElementById('cartTotal');
-        cartTotal.textContent = `Total: $${total}`;
+    async function updateCart() {
+        const usuario = JSON.parse(localStorage.getItem('usuario'));
+        if (!usuario) return;
+
+        try {
+            const res = await fetch(`http://localhost:8080/api/carrito?email=${usuario.email}`);
+            if (!res.ok) throw new Error('Error al obtener carrito');
+            
+            const carritoData = await res.json();
+            const cartItemsContainer = document.getElementById('cartItems');
+            cartItemsContainer.innerHTML = '';
+
+            let total = 0;
+
+            carritoData.items.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+
+                const itemImage = document.createElement('img');
+                itemImage.src = item.articulo.imagenUrl 
+                    ? `http://localhost:8080/api/articulos/imagenes/${item.articulo.imagenUrl}`
+                    : './img/img.png';
+
+                const itemInfo = document.createElement('div');
+                itemInfo.className = 'cart-item-info';
+                itemInfo.innerHTML = `
+                    <h5>${item.articulo.nombre}</h5>
+                    <p>Precio: $${item.articulo.precio} x ${item.cantidad}</p>
+                `;
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Eliminar';
+                removeButton.addEventListener('click', () => eliminarDelCarrito(item.articulo.id));
+
+                cartItem.appendChild(itemImage);
+                cartItem.appendChild(itemInfo);
+                cartItem.appendChild(removeButton);
+                cartItemsContainer.appendChild(cartItem);
+
+                total += item.articulo.precio * item.cantidad;
+            });
+
+            document.getElementById('cartTotal').textContent = `Total: $${total}`;
+        } catch (err) {
+            console.error('Error en updateCart:', err);
+            document.getElementById('cartItems').innerHTML = '<p>Error al cargar el carrito</p>';
+        }
     }
 
-    document.getElementById('openCart').addEventListener('click', function () {
+
+    async function eliminarDelCarrito(articuloId) {
+        const usuario = JSON.parse(localStorage.getItem('usuario'));
+        if (!usuario) return;
+        
+        const email = usuario.email;
+        try {
+            const res = await fetch(`http://localhost:8080/api/carrito/eliminar?email=${email}&articuloId=${articuloId}`, {
+                method: 'DELETE'
+            });
+
+            if (res.ok) {
+                updateCart();
+                actualizarContador();
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async function actualizarContador() {
+        const usuario = JSON.parse(localStorage.getItem('usuario'));
+        if (!usuario) return;
+
+        const email = usuario.email;
+
+        try {
+            const res = await fetch(`http://localhost:8080/api/carrito?email=${email}`);
+            const carrito = await res.json();
+            const cantidad = carrito.items.reduce((acc, item) => acc + item.cantidad, 0);
+            document.getElementById('openCart').innerHTML = `Carrito <i class='bx bx-cart'></i> <sup>${cantidad}</sup>`;
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+
+    // Al hacer click en el icono carrito
+    document.getElementById('openCart').addEventListener('click', () => {
         document.getElementById('cartOverlay').style.display = 'block';
         updateCart();
     });
 
-    document.getElementById('closeCart').addEventListener('click', function () {
+    document.getElementById('closeCart').addEventListener('click', () => {
         document.getElementById('cartOverlay').style.display = 'none';
     });
 
-    window.addEventListener('click', function (event) {
-        if (event.target == document.getElementById('cartOverlay')) {
+    window.addEventListener('click', (event) => {
+        if (event.target === document.getElementById('cartOverlay')) {
             document.getElementById('cartOverlay').style.display = 'none';
         }
     });
 
+    // Al cargar la página
+    actualizarContador();
+
     // ----------------------------------
     // Inicia sesión
 
-    const saludo = document.getElementById('saludoUsuario');
     const usuario = JSON.parse(localStorage.getItem('usuario'));
+    if (usuario) {
+        actualizarContador(); // ahora funciona porque define el email internamente
+    }
+
+
+
+    const saludo = document.getElementById('saludoUsuario');
 
     if (usuario && usuario.nombre) {
         saludo.textContent = `Hola, ${usuario.nombre} 👋`;
