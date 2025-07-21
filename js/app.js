@@ -67,19 +67,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
    
-    // Entra al crud
-    const crud = document.getElementById('crud');
+    // // Entra al crud
+    // const crud = document.getElementById('crud');
 
-    crud.addEventListener('click', () => {
-        const usuario = JSON.parse(localStorage.getItem('usuario'));
-        console.log(usuario);
+    // crud.addEventListener('click', () => {
+    //     const usuario = JSON.parse(localStorage.getItem('usuario'));
+    //     console.log(usuario);
 
-        if (usuario && usuario.rol === 'ADMIN') {
-            window.location.href = './html/crud.html';
-        } else {
-            alert('Acceso denegado. Esta sección es solo para administradores.');
-        }
-    });
+    //     if (usuario && usuario.rol === 'ADMIN') {
+    //         window.location.href = './html/crud.html';
+    //     } else {
+    //         alert('Acceso denegado. Esta sección es solo para administradores.');
+    //     }
+    // });
 
 
     // ----------------------------------
@@ -316,6 +316,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (usuario) {
         accionesSinSesion.style.display = 'none';
         accionesConSesion.style.display = 'block';
+        if (usuario && usuario.rol === 'ADMIN') {
+            accionesAdmin.style.display = 'block';
+        } else {
+            accionesAdmin.style.display = 'none';
+        }
     } else {
         accionesSinSesion.style.display = 'block';
         accionesConSesion.style.display = 'none';
