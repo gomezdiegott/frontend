@@ -41,7 +41,7 @@ header {
     background-color: cornflowerblue;
     color: #000;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     font-family: "Playwrite AU TAS", cursive;
 }
@@ -50,7 +50,7 @@ header nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 85%;
+    width: 90%;
     margin: 0 auto;
     & a img {
         width: 10vh;
@@ -58,7 +58,7 @@ header nav {
 }
 
 nav .search-container {
-    max-width: 400px;
+    max-width: 800px;
     .coso {
         display: flex;
         #buscador {
@@ -131,6 +131,125 @@ nav ul{
         }
     }
 }
+
+/* Estilo del botón hamburguesa */
+#menuToggle {
+    display: block;
+    cursor: pointer;
+    width: 30px;
+    height: 25px;
+    position: relative;
+    z-index: 2;
+}
+
+#menuToggle span {
+    display: block;
+    height: 4px;
+    background: #000;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+/* Menú oculto por defecto */
+#menu {
+    position: absolute;
+    top: 10vh;
+    right: 0;
+    background-color: #cd9d48;
+    border: 1px solid #cd9d48;
+    padding: 20px;
+    display: none;
+    flex-direction: column;
+    z-index: 1;
+}
+
+/* Mostrar el menú */
+#menu.show {
+    display: flex;
+}
+
+/* Agrupar el ícono del menú y el carrito */
+#menuCarritoContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px; /* espacio entre menú y carrito */
+    #openCart {
+        text-decoration: none;
+        cursor: pointer;
+        color: #000;
+    }
+}
+
+/* Ítems del menú uno debajo del otro */
+#menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#menu ul li {
+    margin: 0;
+}
+
+#menu ul li a {
+    color: #000;
+    text-decoration: none;
+}
+
+/* Estilo general para los links dentro del menú */
+#menu a {
+    display: block;
+    padding: 8px 0;
+    color: #000;
+}
+
+/* Alinear el menú con respecto al contenedor */
+#menu {
+    position: absolute;
+    top: 10vh;
+    right: 10px; /* margen del borde derecho */
+    background-color: #cd9d48;
+    border: 1px solid #cd9d48;
+    padding: 20px;
+    display: none;
+    flex-direction: column;
+    z-index: 10;
+    min-width: 160px;
+    border-radius: 4px;
+}
+
+/* Ajustar tamaño y alineación del ícono de carrito */
+#carritoContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#openCart {
+    font-size: 24px; /* hace que el ícono sea similar en tamaño al botón menú */
+    position: relative;
+    display: inline-block;
+    color: #000;
+    text-decoration: none;
+}
+
+/* El número encima del carrito */
+#cartCount {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    color: #000;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-weight: bold;
+    display: none; /* Por defecto oculto si no hay productos */
+}
+
 
 
 /* MAIN */

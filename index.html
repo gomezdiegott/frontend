@@ -12,7 +12,6 @@
     <header>
         <nav>
             <a href="https://www.instagram.com/la.magia_del.azucar/" target="_blank"><img src="./img/img.png" alt="logo"></a>
-            <span id="saludoUsuario"></span>
 
             <div class="search-container">
                 <div class="coso">
@@ -22,11 +21,41 @@
                 <div id="dropdown" class="dropdown-content"></div>
             </div>
 
-            <ul>
-                <li><a href="./html/login.html">Nosotras</a></li>
-                <li><a href="./html/register.html">Consultar</a></li>
-                <li><a href="#" id="openCart">Carrito <i class='bx bx-cart'></i></a></li>
-            </ul>
+            <!-- Contenedor de menú y carrito -->
+            <div id="menuCarritoContainer">
+                <div id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <!-- Carrito con contador -->
+                <div id="carritoContainer">
+                    <a href="#" id="openCart">
+                        <i class='bx bx-cart'></i>
+                        <span id="cartCount">0</span>
+                    </a>
+                </div>
+            </div>
+            
+
+            <!-- Menú desplegable -->
+            <div id="menu" class="hidden">
+                <ul>
+                    <li><a href="#nosotros">Nosotras</a></li>
+                    <li><a href="#contacto">Consultar</a></li>        
+                </ul>
+
+                <div id="accionesSinSesion">
+                    <a href="./html/login.html">Iniciar Sesión</a>
+                    <a href="./html/register.html">Registrarse</a>
+                </div>
+
+                <div id="accionesConSesion" style="display: none;">
+                    <a href="#" id="verCuenta">Mi Cuenta</a>
+                    <a href="#" id="cerrarSesion">Cerrar Sesión</a>
+                </div>
+            </div>
+
         </nav>
     </header>
     <main>

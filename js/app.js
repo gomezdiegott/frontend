@@ -69,11 +69,18 @@ document.addEventListener('DOMContentLoaded', () => {
    
     // Entra al crud
     const crud = document.getElementById('crud');
-    
+
     crud.addEventListener('click', () => {
-        window.location.href = './html/crud.html';
+        const usuario = JSON.parse(localStorage.getItem('usuario'));
+        console.log(usuario);
+
+        if (usuario && usuario.rol === 'ADMIN') {
+            window.location.href = './html/crud.html';
+        } else {
+            alert('Acceso denegado. Esta sección es solo para administradores.');
+        }
     });
-    
+
 
     // ----------------------------------
     // Inicia el buscador
@@ -258,7 +265,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch(`http://localhost:8080/api/carrito?email=${email}`);
             const carrito = await res.json();
             const cantidad = carrito.items.reduce((acc, item) => acc + item.cantidad, 0);
-            document.getElementById('openCart').innerHTML = `Carrito <i class='bx bx-cart'></i> <sup>${cantidad}</sup>`;
+            const cartCount = document.getElementById('cartCount');
+
+            // Mostrar u ocultar el número
+            if (cantidad > 0) {
+                cartCount.textContent = cantidad;
+                cartCount.style.display = 'inline-block';
+            } else {
+                cartCount.style.display = 'none';
+            }
+
         } catch (err) {
             console.error(err);
         }
@@ -287,22 +303,43 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------------
     // Inicia sesión
 
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
-    if (usuario) {
-        actualizarContador(); // ahora funciona porque define el email internamente
-    }
-
-
-
-    const saludo = document.getElementById('saludoUsuario');
-
-    if (usuario && usuario.nombre) {
-        saludo.textContent = `Hola, ${usuario.nombre} 👋`;
-    } else {
-        saludo.textContent = `Hola, visitante 👤`;
-    }
-
+   
 
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
 
+    const accionesSinSesion = document.getElementById('accionesSinSesion');
+    const accionesConSesion = document.getElementById('accionesConSesion');
+
+    if (usuario) {
+        accionesSinSesion.style.display = 'none';
+        accionesConSesion.style.display = 'block';
+    } else {
+        accionesSinSesion.style.display = 'block';
+        accionesConSesion.style.display = 'none';
+    }
+
+    // Cerrar sesión
+    const cerrarSesion = document.getElementById('cerrarSesion');
+    cerrarSesion.addEventListener('click', () => {
+        localStorage.removeItem('usuario');
+        window.location.href = '../index.html';
+    });
+
+    // Redirigir a la página de cuenta
+    const verCuenta = document.getElementById('verCuenta');
+    verCuenta.addEventListener('click', () => {
+        window.location.href = '../html/myaccount.html';
+    });
+});
+
+
+
+const menuToggle = document.getElementById('menuToggle');
+const menu = document.getElementById('menu');
+
+menuToggle.addEventListener('click', () => {
+    menu.classList.toggle('show');
+});

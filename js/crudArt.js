@@ -4,6 +4,18 @@ const API_URL = "http://localhost:8080/api/articulos";
 // Cuando se carga la página, mostramos el listado
 document.addEventListener("DOMContentLoaded", listarArticulos);
 
+// Verifica si el usuario es administrador
+document.addEventListener('DOMContentLoaded', () => {
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+
+    if (!usuario || usuario.rol !== 'ADMIN') {
+        alert("Acceso denegado. Solo para administradores.");
+        window.location.href = '../index.html';
+    }
+});
+
+
+
 document.getElementById("form-articulo").addEventListener("submit", guardarArticulo);
 
 document.getElementById("cancelar").addEventListener("click", () => {
